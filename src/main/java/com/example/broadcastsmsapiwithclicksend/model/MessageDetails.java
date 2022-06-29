@@ -8,6 +8,8 @@ public class MessageDetails {
 
     private String sendingSource;
 
+    private String smsCampaignName;
+
     public MessageDetails() {
     }
 
@@ -33,5 +35,13 @@ public class MessageDetails {
 
     public void setSendingSource(String sendingSource) {
         this.sendingSource = sendingSource;
+    }
+
+    public String getSmsCampaignName() {
+        return smsCampaignName;
+    }
+
+    public void setSmsCampaignName(String smsCampaignName) {
+        this.smsCampaignName = smsCampaignName;
     }
 }

@@ -1,8 +1,10 @@
 package com.example.broadcastsmsapiwithclicksend.api;
 
 import ClickSend.Api.SmsApi;
+import ClickSend.Api.SmsCampaignApi;
 import ClickSend.ApiClient;
 import ClickSend.ApiException;
+import ClickSend.Model.SmsCampaign;
 import ClickSend.Model.SmsMessage;
 import ClickSend.Model.SmsMessageCollection;
 import com.example.broadcastsmsapiwithclicksend.model.MessageDetails;
@@ -35,13 +37,32 @@ public class BroadcastSMSRestController {
         SmsMessageCollection smsMessages = new SmsMessageCollection();
         smsMessages.messages(smsMessageList);
         try {
-            String result = smsApi.smsSendPost(smsMessages);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            String response = smsApi.smsSendPost(smsMessages);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ApiException e) {
             e.printStackTrace();
         }
 
         return new ResponseEntity<>("Exception when calling SmsApi#smsSendPost", HttpStatus.BAD_REQUEST);
     }
+    @PostMapping("/api/sms20000")
+    public ResponseEntity<String> sendSMSupTo20000Numbers(@RequestBody MessageDetails messageDetails){
+        SmsCampaignApi smsCampaignApi = new SmsCampaignApi(clickSendConfig);
+        SmsCampaign campaign = new SmsCampaign(); // SmsCampaign | SmsCampaign model
+
+        campaign.listId(messageDetails.getContactListOfMultipleNumbers());
+        campaign.name(messageDetails.getSmsCampaignName());
+        campaign.body(messageDetails.getMessageBody());
+
+        try {
+            String response = smsCampaignApi.smsCampaignsSendPost(campaign);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("Exception when calling SmsCampaignApi#smsCampaignsSendPost", HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
